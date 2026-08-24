@@ -76,9 +76,21 @@ export default function Footer() {
                 <span className="font-inter text-sm" style={{ color: "#0B2E6F" }}>info@pingalcapital.com</span>
               </div>
               <div className="flex items-start gap-3">
-                <MapPin size={15} style={{ color: "#0B2E6F", flexShrink: 0, marginTop: "2px" }} />
-                <span className="font-inter text-sm leading-relaxed" style={{ color: "#0B2E6F" }}>
-                  516 5th floor Wave Silver Tower Sector 18 Noida Gautam Buddha Nagar Uttar Pradesh 201301
+                <MapPin
+                  size={15}
+                  style={{
+                    color: "#0B2E6F",
+                    flexShrink: 0,
+                    marginTop: "2px",
+                  }}
+                />
+
+                <span
+                  className="font-inter text-sm leading-relaxed"
+                  style={{ color: "#0B2E6F" }}
+                >
+                  Office No. 6, 33rd Floor, Silver Wing, Wave One,
+                  Sector 18, Noida, Uttar Pradesh - 201301
                 </span>
               </div>
             </div>

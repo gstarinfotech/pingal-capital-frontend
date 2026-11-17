@@ -11,8 +11,6 @@ export default function AdminPage() {
     const [content, setContent] = useState(null);
     const [saving, setSaving] = useState(false);
     const [saved, setSaved] = useState(false);
-
-    // Pages registry — add new pages here as we build
     const pages = [
         { key: "home-loan", label: "Home Loan", tabs: ["Hero", "Info", "FAQ"] },
         { key: "nri-loan", label: "NRI Loan", tabs: ["Hero", "Info", "FAQ"] },
@@ -149,6 +147,10 @@ export default function AdminPage() {
                             {page.label}
                         </button>
                     ))}
+
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-3 mt-6 mb-3">Website Settings</p>
+                    <a href="/admin/seo" className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">SEO Manager</a>
+                    <a href="/admin/settings" className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Google Analytics</a>
                 </aside>
 
                 {/* Main Content */}

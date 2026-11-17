@@ -4,6 +4,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import Script from "next/script";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import WhatsAppButton from "@/components/WhatsappButton";
+import { applySeoMetadata, getSiteSettings } from "@/lib/admin-settings";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -24,10 +25,26 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-export const metadata = {
+const baseMetadata = {
+  metadataBase: new URL("https://www.pingalcapital.com"),
   title: "Home Loans, Business Loans & Real Estate Project Funding | Pingal Capital",
   description: "Pingal Capital specializes in Home Loans, loan against property, Working Capital, Debt consolidation Business Loans,Structured Finance, Builder & Construction Finance loans across India.",
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: "Pingal Capital",
+    title: "Home Loans, Business Loans & Real Estate Project Funding | Pingal Capital",
+    description: "Pingal Capital specializes in Home Loans, loan against property, Working Capital, Debt consolidation Business Loans,Structured Finance, Builder & Construction Finance loans across India.",
+    url: "/",
+  },
+  twitter: { card: "summary_large_image" },
 };
+
+export const dynamic = "force-dynamic";
+
+export async function generateMetadata() {
+  return applySeoMetadata("/", baseMetadata);
+}
 const brandColors = {
   Facebook: "#1877F2",
   YouTube: "#FF0000",
@@ -35,12 +52,33 @@ const brandColors = {
   Instagram: "#E1306C",
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  const siteSettings = await getSiteSettings();
+  const analyticsId = siteSettings?.googleAnalyticsId || "";
   return (
     <html
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        {analyticsId ? (
+          <>
+            <Script
+              async
+              src={`https://www.googletagmanager.com/gtag/js?id=${analyticsId}`}
+              strategy="afterInteractive"
+            />
+            <Script id="pingal-google-analytics" strategy="afterInteractive">
+              {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){window.dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', '${analyticsId}');
+              `}
+            </Script>
+          </>
+        ) : null}
+      </head>
       <body className="min-h-full flex flex-col">
         {/* Top Bar */}
         <div style={{ background: "#0a2660" }}>
@@ -74,7 +112,7 @@ export default function RootLayout({ children }) {
         </div>
         {children}
         <Script src="https://elfsightcdn.com/platform.js" strategy="lazyOnload" />
-        <WhatsAppButton/>
+        <WhatsAppButton />
       </body>
     </html >
   );

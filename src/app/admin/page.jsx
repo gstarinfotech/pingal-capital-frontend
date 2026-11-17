@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import SubmissionsView from "@/components/SubmissionsView";
 import DynamicTabRenderer from "@/components/DynamicTabRenderer";
+import SeoManagerPanel from "@/components/admin/SeoManagerPanel";
+import WebsiteSettingsPanel from "@/components/admin/WebsiteSettingsPanel";
 
 export default function AdminPage() {
     const router = useRouter();
@@ -43,7 +45,14 @@ export default function AdminPage() {
             router.push("/admin/login");
             return;
         }
-        loadContent(activePage);
+        const requestedView = new URLSearchParams(window.location.search).get("view");
+        if (requestedView === "seo") {
+            setActivePage("seo-manager");
+        } else if (requestedView === "settings") {
+            setActivePage("website-settings");
+        } else {
+            loadContent(activePage);
+        }
     }, []);
 
     const loadContent = (page) => {
@@ -97,14 +106,16 @@ export default function AdminPage() {
                 </h1>
                 <div className="flex items-center gap-4">
                     {saved && <span className="text-sm text-green-500 font-medium">Saved successfully!</span>}
-                    <button
-                        onClick={handleSave}
-                        disabled={saving || !content}
-                        className="px-5 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
-                        style={{ background: "#0B2E6F" }}
-                    >
-                        {saving ? "Saving..." : "Save Changes"}
-                    </button>
+                    {!["seo-manager", "website-settings"].includes(activePage) && (
+                        <button
+                            onClick={handleSave}
+                            disabled={saving || !content}
+                            className="px-5 py-2 rounded-lg text-sm font-semibold text-white transition-opacity hover:opacity-90 disabled:opacity-50"
+                            style={{ background: "#0B2E6F" }}
+                        >
+                            {saving ? "Saving..." : "Save Changes"}
+                        </button>
+                    )}
                     <button
                         onClick={handleLogout}
                         className="px-4 py-2 rounded-lg text-sm font-medium text-gray-500 border hover:bg-gray-50"
@@ -149,15 +160,29 @@ export default function AdminPage() {
                     ))}
 
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-3 mt-6 mb-3">Website Settings</p>
-                    <a href="/admin/seo" className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">SEO Manager</a>
-                    <a href="/admin/settings" className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-50">Google Analytics</a>
+                    <button
+                        type="button"
+                        onClick={() => setActivePage("seo-manager")}
+                        className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                        style={{ background: activePage === "seo-manager" ? "#EEF2FF" : "transparent", color: activePage === "seo-manager" ? "#0B2E6F" : "#6b7280" }}
+                    >SEO Manager</button>
+                    <button
+                        type="button"
+                        onClick={() => setActivePage("website-settings")}
+                        className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                        style={{ background: activePage === "website-settings" ? "#EEF2FF" : "transparent", color: activePage === "website-settings" ? "#0B2E6F" : "#6b7280" }}
+                    >Google Analytics</button>
                 </aside>
 
                 {/* Main Content */}
                 <div className="flex-1 flex flex-col">
 
                     {/* Submissions View */}
-                    {activePage.startsWith("submissions-") ? (
+                    {activePage === "seo-manager" ? (
+                        <SeoManagerPanel />
+                    ) : activePage === "website-settings" ? (
+                        <WebsiteSettingsPanel />
+                    ) : activePage.startsWith("submissions-") ? (
                         <SubmissionsView
                             formSlug={activePage.replace("submissions-", "")}
                             title={submissionPages.find(p => p.key === activePage)?.label + " Submissions"}

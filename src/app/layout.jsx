@@ -4,6 +4,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import Script from "next/script";
 import { FaFacebook, FaInstagram, FaLinkedin, FaYoutube } from "react-icons/fa";
 import WhatsAppButton from "@/components/WhatsappButton";
+import SiteCodeInjector from "@/components/SiteCodeInjector";
 import { applySeoMetadata, getSiteSettings } from "@/lib/admin-settings";
 
 const playfair = Playfair_Display({
@@ -80,6 +81,11 @@ export default async function RootLayout({ children }) {
         ) : null}
       </head>
       <body className="min-h-full flex flex-col">
+        <SiteCodeInjector
+          headCode={siteSettings?.headCode || ""}
+          bodyStartCode={siteSettings?.bodyStartCode || ""}
+          bodyEndCode={siteSettings?.bodyEndCode || ""}
+        />
         {/* Top Bar */}
         <div style={{ background: "#0a2660" }}>
           <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-16">

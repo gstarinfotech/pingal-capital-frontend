@@ -59,6 +59,9 @@ export async function getSiteSettings() {
         );
         return result.rows[0]?.settings || {
             googleAnalyticsId: "",
+            headCode: "",
+            bodyStartCode: "",
+            bodyEndCode: "",
         };
     } catch (error) {
         console.error("Unable to load Pingal site settings:", error.message);

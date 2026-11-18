@@ -49,6 +49,7 @@ export default function Navbar() {
                 <div className="hidden lg:flex items-center gap-6 xl:gap-10 text-sm font-medium font-inter" style={{ color: "#051E44" }}>
                     <Link href="/" className="hover:opacity-60 transition-opacity whitespace-nowrap">Home</Link>
                     <Link href="/about" className="hover:opacity-60 transition-opacity whitespace-nowrap">About us</Link>
+                    <Link href="/blogs" className="hover:opacity-60 transition-opacity whitespace-nowrap">Blogs</Link>
 
                     {/* Services Dropdown */}
                     <div
@@ -120,6 +121,7 @@ export default function Navbar() {
                     {[
                         { label: "Home", href: "/" },
                         { label: "About us", href: "/about" },
+                        { label: "Blogs", href: "/blogs" },
                     ].map((item) => (
                         <Link
                             key={item.label}

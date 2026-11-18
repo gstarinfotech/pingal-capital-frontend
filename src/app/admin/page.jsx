@@ -5,6 +5,7 @@ import SubmissionsView from "@/components/SubmissionsView";
 import DynamicTabRenderer from "@/components/DynamicTabRenderer";
 import SeoManagerPanel from "@/components/admin/SeoManagerPanel";
 import WebsiteSettingsPanel from "@/components/admin/WebsiteSettingsPanel";
+import BlogManagerPanel from "@/components/admin/BlogManagerPanel";
 
 export default function AdminPage() {
     const router = useRouter();
@@ -89,7 +90,8 @@ export default function AdminPage() {
         await fetch("/api/upload", { method: "POST", body: form });
     };
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        try { await fetch("/api/auth/logout", { method: "POST" }); } catch (error) { console.error("Logout failed:", error); }
         sessionStorage.removeItem("admin_auth");
         router.push("/admin/login");
     };
@@ -159,6 +161,14 @@ export default function AdminPage() {
                         </button>
                     ))}
 
+                    <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-3 mt-6 mb-3">Website Content</p>
+                    <button
+                        type="button"
+                        onClick={() => setActivePage("blog-manager")}
+                        className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium transition-colors"
+                        style={{ background: activePage === "blog-manager" ? "#EEF2FF" : "transparent", color: activePage === "blog-manager" ? "#0B2E6F" : "#6b7280" }}
+                    >Blog Management</button>
+
                     <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest px-3 mt-6 mb-3">Website Settings</p>
                     <button
                         type="button"
@@ -178,7 +188,9 @@ export default function AdminPage() {
                 <div className="flex-1 flex flex-col">
 
                     {/* Submissions View */}
-                    {activePage === "seo-manager" ? (
+                    {activePage === "blog-manager" ? (
+                        <BlogManagerPanel />
+                    ) : activePage === "seo-manager" ? (
                         <SeoManagerPanel />
                     ) : activePage === "website-settings" ? (
                         <WebsiteSettingsPanel />

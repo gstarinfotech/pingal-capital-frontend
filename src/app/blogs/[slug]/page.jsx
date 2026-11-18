@@ -64,13 +64,16 @@ export default async function BlogDetailPage({ params }) {
         <Navbar />
       </div>
       <article>
-        <div className="bg-[#0a2660] px-5 pb-14 pt-14 text-white sm:pb-20 sm:pt-20">
-          <div className="mx-auto max-w-4xl">
-            <Link href="/blogs" className="mb-8 inline-flex items-center gap-2 text-xs font-semibold text-blue-100 transition hover:text-[#e5bd59]">← All articles</Link>
-            <p className="mb-4 text-xs font-bold uppercase tracking-[.22em] text-[#e5bd59]">Pingal Capital Insights</p>
-            <h1 className="font-playfair text-3xl font-bold leading-tight sm:text-4xl lg:text-5xl">{blog.title}</h1>
-            {blog.excerpt&&<p className="mt-5 max-w-3xl text-base leading-7 text-blue-100">{blog.excerpt}</p>}
-            <p className="mt-6 text-xs text-blue-200">{dateLabel(blog.publishedAt||blog.createdAt)}</p>
+        <div
+          className="relative overflow-hidden bg-[#0B2E6F] px-6 pt-12 pb-20 sm:pt-16 sm:pb-24"
+          style={{ background: "linear-gradient(to bottom right, #0B2E6F 50%, #D4A437 100%)" }}
+        >
+          <div className="mx-auto max-w-6xl">
+            <Link href="/blogs" className="mb-7 inline-flex items-center gap-2 text-xs font-semibold text-white/80 transition hover:text-[#D4A437]">← All articles</Link>
+            <span className="mb-4 block text-xs font-semibold uppercase tracking-widest text-[#D4A437]" style={{ fontFamily: "Work Sans, sans-serif" }}>Pingal Capital Insights</span>
+            <h1 className="mb-6 max-w-4xl font-medium leading-[1.1] text-white" style={{ fontFamily: "Playfair Display, serif", fontSize: "clamp(34px, 4.5vw, 60px)" }}>{blog.title}</h1>
+            {blog.excerpt&&<p className="max-w-3xl text-base leading-relaxed text-white/70" style={{ fontFamily: "Work Sans, sans-serif" }}>{blog.excerpt}</p>}
+            <p className="mt-6 text-xs text-white/65">{dateLabel(blog.publishedAt||blog.createdAt)}</p>
           </div>
         </div>
         <div className="mx-auto max-w-5xl px-5 pb-20 pt-10 sm:px-8 sm:pt-14">

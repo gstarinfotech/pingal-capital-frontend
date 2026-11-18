@@ -38,12 +38,20 @@ export default async function BlogsPage() {
       <div className="bg-[#0B2E6F]">
         <Navbar />
       </div>
-      <section className="relative overflow-hidden bg-[#0a2660] px-5 pb-20 pt-20 text-white sm:pb-24 sm:pt-28">
-        <div className="absolute -right-24 -top-28 h-96 w-96 rounded-full bg-[#d4a437]/15 blur-3xl"/>
-        <div className="relative mx-auto max-w-7xl">
-          <p className="mb-4 text-xs font-semibold uppercase tracking-[.28em] text-[#e5bd59]">Pingal Capital Insights</p>
-          <h1 className="max-w-3xl font-playfair text-4xl font-bold leading-tight sm:text-5xl lg:text-6xl">Ideas that move your <span className="text-[#e5bd59]">business forward.</span></h1>
-          <p className="mt-5 max-w-2xl text-sm leading-7 text-blue-100 sm:text-base">Financial perspectives, funding knowledge and practical guidance to help you make confident decisions.</p>
+      <section
+        className="relative overflow-hidden bg-[#0B2E6F] px-6 pt-20 pb-28"
+        style={{ background: "linear-gradient(to bottom right, #0B2E6F 50%, #D4A437 100%)" }}
+      >
+        <div className="mx-auto max-w-6xl">
+          <span className="mb-4 block text-xs font-semibold uppercase tracking-widest text-[#D4A437]" style={{ fontFamily: "Work Sans, sans-serif" }}>
+            Pingal Capital Insights
+          </span>
+          <h1 className="mb-6 max-w-[640px] font-medium leading-[1.1] text-white" style={{ fontFamily: "Playfair Display, serif", fontSize: "clamp(36px, 5vw, 64px)" }}>
+            Ideas that move your <span className="text-[#D4A437]">business forward.</span>
+          </h1>
+          <p className="max-w-xl text-base leading-relaxed text-white/70" style={{ fontFamily: "Work Sans, sans-serif" }}>
+            Financial perspectives, funding knowledge and practical guidance to help you make confident decisions.
+          </p>
         </div>
       </section>
       <section className="mx-auto max-w-7xl px-5 py-14 sm:px-8 lg:px-12 lg:py-20">

@@ -60,7 +60,9 @@ export default async function BlogDetailPage({ params }) {
   const blocks = Array.isArray(blog.contentBlocks) ? blog.contentBlocks : [];
   return (
     <main className="min-h-screen bg-white">
-      <Navbar />
+      <div className="bg-[#0B2E6F]">
+        <Navbar />
+      </div>
       <article>
         <div className="bg-[#0a2660] px-5 pb-14 pt-14 text-white sm:pb-20 sm:pt-20">
           <div className="mx-auto max-w-4xl">
@@ -72,7 +74,6 @@ export default async function BlogDetailPage({ params }) {
           </div>
         </div>
         <div className="mx-auto max-w-5xl px-5 pb-20 pt-10 sm:px-8 sm:pt-14">
-          {blog.featuredImage&&<img src={blog.featuredImage} alt={blog.title} className="mb-10 max-h-[520px] w-full rounded-2xl object-cover shadow-lg"/>}
           <div className="mx-auto max-w-3xl">
             {blocks.length ? blocks.map((block,index)=><ContentBlock key={index} block={block}/>) : <div className="whitespace-pre-line text-[15px] leading-8 text-slate-600">{blog.content}</div>}
             <div className="mt-14 border-t border-slate-200 pt-7"><Link href="/blogs" className="inline-flex items-center gap-2 rounded-full border border-[#0D3785] px-5 py-3 text-sm font-semibold text-[#0D3785] transition hover:bg-[#0D3785] hover:text-white">← Back to all articles</Link></div>

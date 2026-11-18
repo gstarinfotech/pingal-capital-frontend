@@ -35,7 +35,9 @@ export default async function BlogsPage() {
   const blogs = await getBlogs();
   return (
     <main className="min-h-screen bg-[#f8f9fc]">
-      <Navbar />
+      <div className="bg-[#0B2E6F]">
+        <Navbar />
+      </div>
       <section className="relative overflow-hidden bg-[#0a2660] px-5 pb-20 pt-20 text-white sm:pb-24 sm:pt-28">
         <div className="absolute -right-24 -top-28 h-96 w-96 rounded-full bg-[#d4a437]/15 blur-3xl"/>
         <div className="relative mx-auto max-w-7xl">

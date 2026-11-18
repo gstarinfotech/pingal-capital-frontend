@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Plus, FileText, ImagePlus, Trash2, Pencil, Eye, Save, X, ChevronUp, ChevronDown, Loader2, Search } from "lucide-react";
 
 const empty = {
-  title: "", slug: "", excerpt: "", featuredImage: "", contentBlocks: [],
+  title: "", slug: "", excerpt: "", featuredImage: "", intro: "", contentBlocks: [],
   metaTitle: "", metaDescription: "", focusKeyword: "", canonicalUrl: "",
   ogTitle: "", ogDescription: "", ogImage: "", robotsIndex: true, robotsFollow: true,
   status: "DRAFT",
@@ -42,8 +42,15 @@ export default function BlogManagerPanel() {
   function update(key, value) { setForm((current) => ({ ...current, [key]: value })); }
   function newBlog() { setEditingId(null); setForm(empty); setMessage(""); setError(""); }
   function editBlog(blog) {
+    const savedBlocks = Array.isArray(blog.contentBlocks) ? blog.contentBlocks : [];
+    const introBlock = savedBlocks.find((block) => block.type === "intro");
     setEditingId(blog.id);
-    setForm({ ...empty, ...blog, contentBlocks: Array.isArray(blog.contentBlocks) ? blog.contentBlocks : [] });
+    setForm({
+      ...empty,
+      ...blog,
+      intro: blog.intro || introBlock?.text || "",
+      contentBlocks: savedBlocks.filter((block) => block.type !== "intro"),
+    });
     setMessage(""); setError("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -85,7 +92,11 @@ export default function BlogManagerPanel() {
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return setError("Use a valid URL slug, for example business-funding-guide.");
     setSaving(true);
     try {
-      const payload = { ...form, title, slug, content: JSON.stringify(form.contentBlocks || []) };
+      const articleBlocks = [
+        ...(form.intro.trim() ? [{ type: "intro", text: form.intro.trim() }] : []),
+        ...(form.contentBlocks || []),
+      ];
+      const payload = { ...form, title, slug, contentBlocks: articleBlocks, content: JSON.stringify(articleBlocks) };
       const response = await fetch(editingId ? `/api/blogs/${editingId}` : "/api/blogs", {
         method: editingId ? "PUT" : "POST",
         headers: { "Content-Type": "application/json" },
@@ -95,7 +106,16 @@ export default function BlogManagerPanel() {
       if (!response.ok) throw new Error(data.error || "Unable to save blog");
       setMessage(form.status === "PUBLISHED" ? "Blog published successfully. It is now available on the website." : "Draft saved successfully.");
       setEditingId(data.blog?.id || null);
-      if (data.blog) setForm({ ...empty, ...data.blog, contentBlocks: data.blog.contentBlocks || [] });
+      if (data.blog) {
+        const savedBlocks = Array.isArray(data.blog.contentBlocks) ? data.blog.contentBlocks : articleBlocks;
+        const introBlock = savedBlocks.find((block) => block.type === "intro");
+        setForm({
+          ...empty,
+          ...data.blog,
+          intro: data.blog.intro || introBlock?.text || form.intro,
+          contentBlocks: savedBlocks.filter((block) => block.type !== "intro"),
+        });
+      }
       await loadBlogs();
     } catch (e) { setError(e.message || "Unable to save blog"); }
     finally { setSaving(false); }
@@ -140,6 +160,21 @@ export default function BlogManagerPanel() {
                   {form.featuredImage ? <div className="relative"><img src={form.featuredImage} alt="Featured preview" className="max-h-72 w-full rounded-lg object-cover"/><button type="button" onClick={() => update("featuredImage","")} className="absolute right-2 top-2 rounded-lg bg-white/95 p-2 text-red-600 shadow"><X size={16}/></button></div> : <label className="flex cursor-pointer flex-col items-center justify-center py-8 text-center"><ImagePlus size={30} className="mb-2 text-[#0D3785]"/><span className="text-sm font-semibold text-slate-700">Upload featured image</span><span className="mt-1 text-xs text-slate-500">JPG, PNG, WEBP or GIF · Max 4 MB</span><input type="file" accept="image/jpeg,image/png,image/webp,image/gif" className="hidden" disabled={uploading} onChange={e => { const file=e.target.files?.[0]; if(file) uploadImage(file,url=>update("featuredImage",url)); e.target.value=""; }}/></label>}
                 </div>
               </div>
+            </section>
+
+            <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
+              <div className="mb-4 border-b border-slate-100 pb-4">
+                <h2 className="font-semibold text-slate-800">Introduction</h2>
+                <p className="mt-1 text-xs text-slate-500">Add the opening introduction that appears before the main article content.</p>
+              </div>
+              <label className={labelClass}>Blog introduction</label>
+              <textarea
+                className={inputClass}
+                rows={6}
+                value={form.intro}
+                onChange={(e) => update("intro", e.target.value)}
+                placeholder="Write a short introduction to set the context for this article..."
+              />
             </section>
 
             <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-7">
